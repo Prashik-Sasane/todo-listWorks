@@ -1,0 +1,84 @@
+const express = require('express');
+const path = require('path');
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Todo storage (array of objects)
+let todos = []; // { id, text, priority }
+
+// GET: Homepage with optional filter
+app.get('/', (req, res) => {
+  const filter = req.query.filter || 'all';
+
+  const filteredTodos =
+    filter === 'all'
+      ? todos
+      : todos.filter(todo => todo.priority === filter);
+
+  res.render('index', {
+    todos: filteredTodos,
+    filter,
+    error: null
+  });
+});
+
+// POST: Add new todo
+app.post('/add', (req, res) => {
+  const { text, priority } = req.body;
+
+  // Prevent blank todos
+  if (!text || !text.trim()) {
+    return res.render('index', {
+      todos,
+      filter: 'all',
+      error: 'Task cannot be empty!'
+    });
+  }
+
+  // Add todo
+  todos.push({
+    id: Date.now(),
+    text: text.trim(),
+    priority: priority || 'medium'
+  });
+
+  res.redirect('/');
+});
+
+// POST: Edit todo
+app.post('/edit/:id', (req, res) => {
+  const { id } = req.params;
+  const { text, priority } = req.body;
+
+  // Update matching todo
+  todos = todos.map(todo => {
+    if (todo.id == id) {
+      return {
+        ...todo,
+        text: text.trim(),
+        priority
+      };
+    }
+    return todo;
+  });
+
+  res.redirect('/');
+});
+
+// POST: Delete todo
+app.post('/delete/:id', (req, res) => {
+  const { id } = req.params;
+  todos = todos.filter(todo => todo.id != id);
+  res.redirect('/');
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
+});
