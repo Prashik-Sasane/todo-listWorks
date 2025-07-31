@@ -3,16 +3,14 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Middleware
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Todo storage (array of objects)
-let todos = []; // { id, text, priority }
 
-// GET: Homepage with optional filter
+let todos = []; 
 app.get('/', (req, res) => {
   const filter = req.query.filter || 'all';
 
@@ -28,7 +26,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// POST: Add new todo
 app.post('/add', (req, res) => {
   const { text, priority } = req.body;
 
@@ -41,7 +38,7 @@ app.post('/add', (req, res) => {
     });
   }
 
-  // Add todo
+ 
   todos.push({
     id: Date.now(),
     text: text.trim(),

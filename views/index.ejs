@@ -10,8 +10,6 @@
       --danger: #dc3545;
       --header-bg: #22223b;
       --header-color: #fff;
-
-
     }
     body {
       margin: 0;
@@ -159,12 +157,12 @@
       <button type="submit">Add</button>
     </form>
 
-    <!-- Alert (input empty or server error) -->
+
     <% if (typeof error !== 'undefined' && error) { %>
       <div class="alert"><%= error %></div>
     <% } %>
 
-    <!-- Filter Form -->
+
     <form class="filter-form" action="/" method="GET">
       <label for="priority-filter" style="display:none;">Priority Filter</label>
       <select name="filter" id="priority-filter" onchange="this.form.submit()">
