@@ -48,12 +48,11 @@ app.post('/add', (req, res) => {
   res.redirect('/');
 });
 
-// POST: Edit todo
+
 app.post('/edit/:id', (req, res) => {
   const { id } = req.params;
   const { text, priority } = req.body;
 
-  // Update matching todo
   todos = todos.map(todo => {
     if (todo.id == id) {
       return {
@@ -68,14 +67,12 @@ app.post('/edit/:id', (req, res) => {
   res.redirect('/');
 });
 
-// POST: Delete todo
 app.post('/delete/:id', (req, res) => {
   const { id } = req.params;
   todos = todos.filter(todo => todo.id != id);
   res.redirect('/');
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
